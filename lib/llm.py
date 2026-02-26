@@ -22,12 +22,10 @@ class LLM:
     ):
         self.model = model
         self.temperature = temperature
-        client_kwargs = {}
-        if api_key:
-            client_kwargs["api_key"] = api_key
-        if base_url:
-            client_kwargs["base_url"] = base_url
-        self.client = OpenAI(**client_kwargs) if client_kwargs else OpenAI()
+        self.client = OpenAI(
+            api_key=api_key, 
+            base_url=("https://openai.vocareum.com/v1" if api_key.lower().startswith("voc") else None)
+        )
         self.tools: Dict[str, Tool] = {
             tool.name: tool for tool in (tools or [])
         }
